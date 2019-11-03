@@ -114,15 +114,44 @@
             <div class="page-wrapper-top">
                 <!-- BEGIN HEADER -->
                 <!-- <div class="page-header"> -->
+
+                <div class="row">
+                    <div class="col-md-4" style="padding-left: 200px;">
+
+                        <h2 id="MyClockDisplay" class="clock">05:00</h2>
+
+                    </div>
+
+                    <div class="col-md-4"></div>
+
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h2 id="Clock2" class="clock">5</h2>
+                            </div>
+                            <div class="col-md-4" style="padding-top: 50px;">
+                                <button style="margin-left: 5px;" type="button" id="starttimer2" onclick="starttimer2()"
+                                    class="btn blue">Start</button>
+                                <br><br>
+
+
+                            </div>
+                            <div class="col-md-4">
+                                <div id="countdown"></div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
                 <div class="text-center">
 
-                    <h2 id="MyClockDisplay" class="clock">05:00</h2>
 
                     <h1 id="rondeke"><Strong>Qualification Round</Strong></h1>
 
                 </div>
-
-
 
                 <!-- BEGIN HEADER TOP -->
 
@@ -221,18 +250,21 @@
 
             </li>
             <li>
-                <button style="margin-left: 20px;" type="button" id="btnct" class="btn blue">Start
+                <button style="margin-left: 20px;" type="button" id="btnct" class="btn blue">Input</button>
+            </li>
+            <li>
+                <button style="margin-left: 20px;" type="button" id="start1" class="btn blue">Start
                     Timer</button>
             </li>
 
             <li>
-                <button style="margin-left: 20px;" type="button" class="btn blue" onclick="cdpause()">Stop
+                <button style="margin-left: 20px;" type="button" id="stop1" class="btn blue">Stop
                     Timer</button>
 
 
             </li>
             <li>
-                <button style="margin-left: 20px;" type="button" class="btn blue" onclick="cdreset()">Reset
+                <button style=" margin-left: 20px;" type="button" class="btn blue" onclick="cdreset()">Reset
                     Timer</button>
             </li>
             <!-- <li>
@@ -254,8 +286,14 @@
                 <input size="2" value=5 type="number" name="" id="poinminus" class="form-control"
                     placeholder="Poin Minus">
             </li>
+            <li>
+                <input size="2" value=5 type="number" name="" id="waktumini" class="form-control"
+                    placeholder="Waktu Mini">
+            </li>
         </ul>
     </div>
+    <audio id="audio" src="assets/end.wav"></audio>
+
     <!--[if lt IE 9]>
 <script src="../assets/global/plugins/respond.min.js"></script>
 <script src="../assets/global/plugins/excanvas.min.js"></script> 
@@ -414,16 +452,28 @@
         }
     }
     var CCOUNT;
+    var jalan = false;
     $(document).ready(function () {
         $('#btnct').click(function () {
             CCOUNT = $('#seconds').val();
             cdreset();
-            countdown()
         });
         $('#submitronde').click(function () {
             ronde = $('#masukkanrondeke').val();
             console.log(ronde);
             document.getElementById("rondeke").innerHTML = '<Strong>' + ronde + '</Strong>';
+        });
+        $('#start1').click(function () {
+            if (!jalan) {
+                countdown();
+                jalan = true;
+            }
+        });
+        $('#stop1').click(function () {
+            if (jalan) {
+                cdpause();
+                jalan = false;
+            }
         });
     });
     var t, count;
@@ -436,6 +486,8 @@
         seconds = seconds < 10 ? "0" + seconds : seconds;
         document.getElementById('MyClockDisplay').innerHTML = minutes + ':' + seconds;
     }
+
+    // var jalan = false;
 
     function countdown() {
         // starts countdown
@@ -450,9 +502,12 @@
         }
     }
 
+
     function cdpause() {
         // pauses countdown
         clearTimeout(t);
+        jalan = false;
+
     }
 
     function cdreset() {
@@ -462,6 +517,37 @@
         cddisplay();
     }
 
+
+    function starttimer2() {
+        var timeleft = parseInt($('#waktumini').val());
+
+
+        var downloadTimer = setInterval(function () {
+            document.getElementById("Clock2").innerHTML = timeleft;
+            timeleft -= 1;
+            if (timeleft <= 0) {
+                clearInterval(downloadTimer);
+
+                document.getElementById("Clock2").innerHTML = "0"
+                playSound()
+
+            }
+        }, 1000);
+        // var audio = document.getElementById("audio");
+        // audio.play();
+    }
+
+    function playSound() {
+        var sound = document.getElementById("audio");
+        sound.play();
+    }
+    // function resettimer2() {
+    //     // starts countdown
+    //     // resets countdown
+    //     clearTimeout(t2);
+    //     count2 = 5;
+    //     $('#clock2').innerHTML = count2;
+    // }
 
     function minusNilai(id) {
         var index = id.substr(12);
