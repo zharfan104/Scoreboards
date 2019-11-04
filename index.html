@@ -525,7 +525,7 @@
         var downloadTimer = setInterval(function () {
             document.getElementById("Clock2").innerHTML = timeleft;
             timeleft -= 1;
-            if (timeleft <= 0) {
+            if (timeleft <= -1) {
                 clearInterval(downloadTimer);
 
                 document.getElementById("Clock2").innerHTML = "0"
